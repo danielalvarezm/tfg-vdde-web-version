@@ -6,18 +6,18 @@
           <ion-list id="inbox-list">
             <ion-list-header>Inbox</ion-list-header>
             <ion-note>hi@ionicframework.com</ion-note>
-  
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+              <ion-item button @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
+                detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
-  
+
           <ion-list id="labels-list">
             <ion-list-header>Labels</ion-list-header>
-  
+
             <ion-item v-for="(label, index) in labels" lines="none" :key="index">
               <ion-icon slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
               <ion-label>{{ label }}</ion-label>
@@ -39,49 +39,49 @@ import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutl
 export default defineComponent({
   name: 'App',
   components: {
-    IonApp, 
-    IonContent, 
-    IonIcon, 
-    IonItem, 
-    IonLabel, 
-    IonList, 
-    IonListHeader, 
-    IonMenu, 
-    IonMenuToggle, 
-    IonNote, 
-    IonRouterOutlet, 
+    IonApp,
+    IonContent,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonListHeader,
+    IonMenu,
+    IonMenuToggle,
+    IonNote,
+    IonRouterOutlet,
     IonSplitPane,
   },
   setup() {
     const selectedIndex = ref(0);
     const appPages = [
       {
-        title: 'Inbox',
-        url: '/folder/Inbox',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
-      },
-      {
-        title: 'Outbox',
-        url: '/folder/Outbox',
+        title: 'Bar Chart',
+        url: '/folder/BarChart',
         iosIcon: paperPlaneOutline,
         mdIcon: paperPlaneSharp
       },
       {
-        title: 'Favorites',
-        url: '/folder/Favorites',
+        title: 'Inicio',
+        url: '/folder/MenuPrincipal',
+        iosIcon: mailOutline,
+        mdIcon: mailSharp
+      },
+      {
+        title: 'Auxiliar',
+        url: '/folder/Auxiliar',
         iosIcon: heartOutline,
         mdIcon: heartSharp
       },
       {
-        title: 'Archived',
-        url: '/folder/Archived',
+        title: 'Defunciones infantiles',
+        url: '/folder/DefuncionesInfantiles',
         iosIcon: archiveOutline,
         mdIcon: archiveSharp
       },
       {
-        title: 'Trash',
-        url: '/folder/Trash',
+        title: 'Población',
+        url: '/folder/Poblacion',
         iosIcon: trashOutline,
         mdIcon: trashSharp
       },
@@ -93,31 +93,31 @@ export default defineComponent({
       }
     ];
     const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-    
+
     const path = window.location.pathname.split('folder/')[1];
     if (path !== undefined) {
       selectedIndex.value = appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
-    
+
     const route = useRoute();
-    
-    return { 
+
+    return {
       selectedIndex,
-      appPages, 
+      appPages,
       labels,
-      archiveOutline, 
-      archiveSharp, 
-      bookmarkOutline, 
-      bookmarkSharp, 
-      heartOutline, 
-      heartSharp, 
-      mailOutline, 
-      mailSharp, 
-      paperPlaneOutline, 
-      paperPlaneSharp, 
-      trashOutline, 
-      trashSharp, 
-      warningOutline, 
+      archiveOutline,
+      archiveSharp,
+      bookmarkOutline,
+      bookmarkSharp,
+      heartOutline,
+      heartSharp,
+      mailOutline,
+      mailSharp,
+      paperPlaneOutline,
+      paperPlaneSharp,
+      trashOutline,
+      trashSharp,
+      warningOutline,
       warningSharp,
       isSelected: (url: string) => url === route.path ? 'selected' : ''
     }
