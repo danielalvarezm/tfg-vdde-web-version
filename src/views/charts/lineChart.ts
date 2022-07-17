@@ -35,7 +35,7 @@ export default defineComponent({
       required: true
     },
     data: {
-      type: Array as PropType<number[]>,
+      type: Array as PropType<any>,
       required: true
     },
     chartId: {
@@ -66,13 +66,7 @@ export default defineComponent({
   setup(props) {
     const chartData = {
       labels: props.labels,
-      datasets: [
-        {
-          label: 'Data One',
-          backgroundColor: '#f87979',
-          data: props.data
-        }
-      ]
+      datasets: props.data,
     }
 
     const chartOptions = {

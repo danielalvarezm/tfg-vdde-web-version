@@ -21,14 +21,19 @@
 
           <ion-row>
             <ion-col>
-              <ion-item>
-                <ion-label>Seleccione los datos a mostrar:</ion-label>
-                <ion-select value="total" interface="popover" placeholder="Elija una opción" @input="changeData">
-                  <ion-select-option value="male">Hombre</ion-select-option>
-                  <ion-select-option value="female">Mujer</ion-select-option>
-                  <ion-select-option value="total">Total</ion-select-option>
-                </ion-select>
-              </ion-item>
+              <form>
+                <ion-list>
+                  <ion-item v-for="entry in genders" :key="entry.val">
+                    <ion-label>{{entry.text}}</ion-label>
+                    <ion-checkbox
+                      slot="end"
+                      @update:modelValue="entry.isChecked = $event"
+                      :modelValue="entry.isChecked">
+                    </ion-checkbox>
+                  </ion-item>
+                </ion-list>
+              </form>
+              <ion-button @click="applyGenderFilter" color="primary">Aplicar selección</ion-button><br/>
             </ion-col>
 
             <ion-col>
@@ -40,16 +45,17 @@
                   <ion-select-option value="pie">Circular</ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-button @click="changeChart">Cambiar gráfico</ion-button><br>
             </ion-col>
 
           </ion-row>
         </ion-list>
 
         <p>{{ currentChart }}</p>
+        <p>{{genders}}</p>
+
         <div v-if="showChart === true">
-          <BarChart v-if="currentChart === 'bar'" :labels="labels" :data="data" />
-          <LineChart v-if="currentChart === 'line'" :labels="labels" :data="data" />
+          <BarChart v-if="currentChart === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <LineChart v-if="currentChart === 'line'" :labels="labelsDisplayed" :data="dataDisplayed" />
         </div>
       </ion-grid>
     </ion-content>
@@ -58,10 +64,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount } from 'vue';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonItem, IonList, IonSelect, IonLabel, IonListHeader, IonButton, IonButtons, IonSelectOption, IonMenuButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonItem, IonList, IonSelect, IonCheckbox, IonLabel, IonListHeader, IonButton, IonButtons, IonSelectOption, IonMenuButton } from '@ionic/vue';
 import BarChart from './charts/barChart'
 import LineChart from './charts/lineChart'
-import { getPopulation } from '../services/populationService';
+import { PopulationService } from '../services/populationService';
 
 export default defineComponent({
   name: 'PopulationPage',
@@ -78,6 +84,7 @@ export default defineComponent({
     IonCol,
     IonItem,
     IonList,
+    IonCheckbox,
     IonSelect,
     IonLabel,
     IonListHeader,
@@ -87,53 +94,80 @@ export default defineComponent({
     IonMenuButton
   },
   setup() {
-    let data = ref([]);
-    let labels = ref([]);
-    let currentChart = ref('bar');
+    let populationService = new PopulationService();
+    let populationData = ref([]);
     let showChart = ref(false);
+    let dataDisplayed = ref([{}]);
+    let labelsDisplayed = ref([]);
+    let currentChart = ref('bar');
+    let genders = ref([
+      { text: 'Total', val: 'total', isChecked: true },
+      { text: 'Hombre', val: 'male', isChecked: true },
+      { text: 'Mujer', val: 'female', isChecked: true }
+    ]);
 
-    function changeChart() {
-      if (currentChart.value === 'bar') {
-        currentChart.value = 'line';
-      } else {
-        currentChart.value = 'bar';
-      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function changeChartContent(year: number, ccaa: string) {
+      const gendersToDisplay = filterCheckedGenders(genders.value);
+      dataDisplayed.value = populationService.filter2(populationData, 0, gendersToDisplay, 'Andalucía');
+      updateChart();
     }
 
-    function changeData() {
-      console.log('changeData');
+    function updateChart() {
+      showChart.value = false;
+      setTimeout(() => {
+        showChart.value = true;
+      }, 0);
     }
 
-    async function fetchData() {
-      const population = await getPopulation();
-      labels.value = getMonthsAsLabels(population);
+    function applyGenderFilter() {
+      changeChartContent( 0, 'Andalucía');
+    }
 
-      data.value = population.map((item: any) => {
-        const value = item.total_values;
-        if (value[0].interval == '2021') {
-          return value[0].value;
+    function filterCheckedGenders(genders: any) {
+      const result = [];
+      for (let i = 0; i < genders.length; i++) {
+        if (genders[i].isChecked) {
+          result.push(genders[i].val)
         }
-      });
+      }
+
+      return result
+    }
+
+    // Antes de que se muestre la página, cargamos los datos
+    onBeforeMount(async () => { fetchData() });
+
+    // Método asíncrono para cargar los datos de la población
+    async function fetchData() {
+      populationData = await populationService.obtainData();
+
+      // Ejemplo de Andalucía
+      labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
+      changeChartContent( 0, 'Andalucía');
+
+      // labels.value = populationService.getCcaaAsLabels(population);
+
+      // data.value = population.map((item: any) => {
+      //   const value = item.total_values;
+      //   if (value[0].interval == '2021') {
+      //     return value[0].value;
+      //   }
+      // });
+
       showChart.value = true;
     }
 
-    function getMonthsAsLabels(population: any) {
-      return population.map((item: any) => {
-        return item.ccaa;
-      });
-    }
-
-    onBeforeMount(async () => { fetchData() });
-
     return {
-      data,
-      labels,
+      dataDisplayed ,
+      labelsDisplayed,
       currentChart,
+      changeChartContent,
+      genders,
+      applyGenderFilter,
       showChart,
-      changeChart,
       onBeforeMount,
       fetchData,
-      changeData
     }
   }
 });

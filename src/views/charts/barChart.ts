@@ -23,21 +23,15 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       required: true,
     },
-    data: {
-      type: Array as PropType<number[]>,
+    data: { // array of arrays
+      type: Array as PropType<any>,
       required: true,
     },
   },
   setup(props) {
     const chartData = {
       labels: props.labels,
-      datasets: [
-        {
-          label: "Data One",
-          backgroundColor: "#f87979",
-          data: props.data,
-        },
-      ],
+      datasets: props.data,
     };
 
     const chartOptions = {
