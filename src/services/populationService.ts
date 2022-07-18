@@ -27,19 +27,21 @@ class PopulationService {
         return years;
     }
 
-    getCcaaAsLabels(population: any) {
+    getAutonomousCommunitiesAsLabels(population: any) {
         return population.map((item: any) => {
             return item.ccaa;
         });
     }
 
-    filter2(population: any, year = 0, gender: any, autonomousCommunityName: string) {
-        if (autonomousCommunityName != 'all') {
-            return this.filterByAutonomousCommunity2(population, gender, autonomousCommunityName);
+    filter(population: any, year = '0', genders: any, autonomousCommunityName: string) {
+        if (autonomousCommunityName != 'Todas las comunidades') {
+            return this.filterByAutonomousCommunity(population, genders, autonomousCommunityName);
         }
+
+        return this.filterByGenderBasedOnYear(population, year, genders)
     }
 
-    filterByAutonomousCommunity2(population: any, gender: any, autonomousCommunityName: string) {
+    filterByAutonomousCommunity(population: any, genders: any, autonomousCommunityName: string) {
         let autonomousCommunityContent: any = []
         for (let i = 0; i < population.length; i++) {
             if (autonomousCommunityName != population[i].ccaa) {
@@ -47,10 +49,58 @@ class PopulationService {
             }
             autonomousCommunityContent = population[i]
         }
-        return this.filterByGender(autonomousCommunityContent, gender);
+        return this.filterByGenderBasedOnAutonomousCommunity(autonomousCommunityContent, genders);
     }
 
-    filterByGender(autonomousCommunityContent: any, genders: any) {
+    filterByGenderBasedOnYear(population: any, year: string, genders: any) {
+        const finalDataset: any = []
+        genders.forEach((gender: any) => {
+            const dataFiltered: any = [];
+
+            if (gender == 'total') {
+                for (let i = 0; i < population.length; i++) {
+                    const data = population[i].total_values.filter((location: any) => location.interval == year)
+                    dataFiltered.push(data[0].value);
+                }
+
+                finalDataset.push({
+                    label: 'Total',
+                    backgroundColor: '#4766FF',
+                    data: dataFiltered
+                });
+            }
+
+            else if (gender == 'male') {
+                for (let i = 0; i < population.length; i++) {
+                    const data = population[i].male_values.filter((location: any) => location.interval == year)
+                    dataFiltered.push(data[0].value);
+                }
+
+                finalDataset.push({
+                    label: 'Hombre',
+                    backgroundColor: '#98CAFF',
+                    data: dataFiltered
+                });
+            }
+
+            else {
+                for (let i = 0; i < population.length; i++) {
+                    const data = population[i].female_values.filter((location: any) => location.interval == year)
+                    dataFiltered.push(data[0].value);
+                }
+
+                finalDataset.push({
+                    label: 'Mujer',
+                    backgroundColor: '#BAA2FA',
+                    data: dataFiltered
+                });
+            }
+        });
+
+        return finalDataset;
+    }
+
+    filterByGenderBasedOnAutonomousCommunity(autonomousCommunityContent: any, genders: any) {
         const finalDataset: any = []
 
         genders.forEach((gender: any) => {
@@ -102,44 +152,44 @@ class PopulationService {
 
 
 
-    filter(population: any, year = 0, gender: string, autonomousCommunityName: string) {
-        if (autonomousCommunityName != 'all') {
-            return this.filterByAutonomousCommunity(population, gender, autonomousCommunityName);
-        }
-    }
+    // filter(population: any, year = 0, gender: string, autonomousCommunityName: string) {
+    //     if (autonomousCommunityName != 'all') {
+    //         return this.filterByAutonomousCommunity(population, gender, autonomousCommunityName);
+    //     }
+    // }
 
-    filterByAutonomousCommunity(population: any, gender: string, autonomousCommunityName: string) {
-        const datasetFiltered: any = [];
-        for (let i = 0; i < population.length; i++) {
-            if (autonomousCommunityName != population[i].ccaa) {
-                return;
-            }
+    // filterByAutonomousCommunity(population: any, gender: string, autonomousCommunityName: string) {
+    //     const datasetFiltered: any = [];
+    //     for (let i = 0; i < population.length; i++) {
+    //         if (autonomousCommunityName != population[i].ccaa) {
+    //             return;
+    //         }
 
-            //TODO: a lo mejor estos metodos se pueden sacar a un filter by gender
-            if (gender == 'total') {
-                const autonomousCommunityTotalValues = population[i].total_values;
-                for (let i = 0; i < autonomousCommunityTotalValues.length; i++) {
-                    datasetFiltered.push(autonomousCommunityTotalValues[i].value);
-                }
-                return datasetFiltered;
-            }
+    //         //TODO: a lo mejor estos metodos se pueden sacar a un filter by gender
+    //         if (gender == 'total') {
+    //             const autonomousCommunityTotalValues = population[i].total_values;
+    //             for (let i = 0; i < autonomousCommunityTotalValues.length; i++) {
+    //                 datasetFiltered.push(autonomousCommunityTotalValues[i].value);
+    //             }
+    //             return datasetFiltered;
+    //         }
 
-            else if (gender == 'male') {
-                const autonomousCommunityMaleValues = population[i].male_values;
-                for (let i = 0; i < autonomousCommunityMaleValues.length; i++) {
-                    datasetFiltered.push(autonomousCommunityMaleValues[i].value);
-                }
-                return datasetFiltered;
-            }
+    //         else if (gender == 'male') {
+    //             const autonomousCommunityMaleValues = population[i].male_values;
+    //             for (let i = 0; i < autonomousCommunityMaleValues.length; i++) {
+    //                 datasetFiltered.push(autonomousCommunityMaleValues[i].value);
+    //             }
+    //             return datasetFiltered;
+    //         }
 
-            const autonomousCommunityFemaleValues = population[i].female_values;
-            for (let i = 0; i < autonomousCommunityFemaleValues.length; i++) {
-                datasetFiltered.push(autonomousCommunityFemaleValues[i].value);
-            }
+    //         const autonomousCommunityFemaleValues = population[i].female_values;
+    //         for (let i = 0; i < autonomousCommunityFemaleValues.length; i++) {
+    //             datasetFiltered.push(autonomousCommunityFemaleValues[i].value);
+    //         }
 
-            return datasetFiltered;
-        }
-    }
+    //         return datasetFiltered;
+    //     }
+    // }
 }
 
 // Si se selecciona la comunidad autónoma, se deshabilita la casilla de año, ya que si eliges una comunidad autónoma, es para ver los valores de esa comunidad

@@ -27,13 +27,14 @@
                     <ion-label>{{entry.text}}</ion-label>
                     <ion-checkbox
                       slot="end"
+                      :disabled="onlyAnOptionIsSelected(entry.val)"
                       @update:modelValue="entry.isChecked = $event"
+                      @ionChange="reRenderChart"
                       :modelValue="entry.isChecked">
                     </ion-checkbox>
                   </ion-item>
                 </ion-list>
               </form>
-              <ion-button @click="applyGenderFilter" color="primary">Aplicar selección</ion-button><br/>
             </ion-col>
 
             <ion-col>
@@ -45,13 +46,22 @@
                   <ion-select-option value="pie">Circular</ion-select-option>
                 </ion-select>
               </ion-item>
-            </ion-col>
 
+              <ion-item>
+                <ion-label>Seleccione la localización de la que quiera ver información:</ion-label>
+                <ion-select v-model="locationSelected" @ionChange="reRenderChart" interface="popover" placeholder="Elija una opción">
+                  <ion-select-option v-for="entry in autonomousCommunities" :key="entry.val" :value="entry.val">{{entry.text}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+            <!-- Cuando se marqué la opción de todas las comunidades, que aparezca el select con las opciones de los años -->
           </ion-row>
         </ion-list>
 
         <p>{{ currentChart }}</p>
         <p>{{genders}}</p>
+        <!-- center h2-->
+        <h2 class="ion-text-center">{{locationSelected}}</h2>
 
         <div v-if="showChart === true">
           <BarChart v-if="currentChart === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
@@ -64,7 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount } from 'vue';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonItem, IonList, IonSelect, IonCheckbox, IonLabel, IonListHeader, IonButton, IonButtons, IonSelectOption, IonMenuButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonItem, IonList, IonSelect, IonCheckbox, IonLabel, IonListHeader, IonButtons, IonSelectOption, IonMenuButton } from '@ionic/vue';
 import BarChart from './charts/barChart'
 import LineChart from './charts/lineChart'
 import { PopulationService } from '../services/populationService';
@@ -88,7 +98,6 @@ export default defineComponent({
     IonSelect,
     IonLabel,
     IonListHeader,
-    IonButton,
     IonButtons,
     IonSelectOption,
     IonMenuButton
@@ -99,17 +108,51 @@ export default defineComponent({
     let showChart = ref(false);
     let dataDisplayed = ref([{}]);
     let labelsDisplayed = ref([]);
+    let locationSelected = ref('Andalucía');
     let currentChart = ref('bar');
     let genders = ref([
       { text: 'Total', val: 'total', isChecked: true },
       { text: 'Hombre', val: 'male', isChecked: true },
       { text: 'Mujer', val: 'female', isChecked: true }
     ]);
+    let autonomousCommunities = ref([
+      { text: 'Todas las comunidades', val: 'Todas las comunidades'},
+      { text: 'Andalucía', val: 'Andalucía' },
+      { text: 'Principado de Asturias', val: 'Principado de Asturias' },
+      { text: 'Islas Baleares', val: 'Illes Balears' },
+      { text: 'Canarias', val: 'Canarias' },
+      { text: 'Cantabria', val: 'Cantabria'},
+      { text: 'Castilla y León', val: 'Castilla y León'},
+      { text: 'Castilla - La Mancha', val: 'Castilla - La Mancha'},
+      { text: 'Cataluña', val: 'Cataluña'},
+      { text: 'Comunidad Valenciana', val: 'Comunitat Valenciana'},
+      { text: 'Extremadura', val: 'Extremadura'},
+      { text: 'Galicia', val: 'Galicia'},
+      { text: 'Comunidad de Madrid', val: 'Comunidad de Madrid'},
+      { text: 'Región de Murcia', val: 'Región de Murcia'},
+      { text: 'Comunidad Foral de Navarra', val: 'Comunidad Foral de Navarra'},
+      { text: 'País Vasco', val: 'País Vasco'},
+      { text: 'La Rioja', val: 'La Rioja'},
+      { text: 'Ceuta', val: 'Ceuta'},
+      { text: 'Melilla', val: 'Melilla'},
+
+    ])
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function changeChartContent(year: number, ccaa: string) {
+    function changeChartContent(year = 0) {
       const gendersToDisplay = filterCheckedGenders(genders.value);
-      dataDisplayed.value = populationService.filter2(populationData, 0, gendersToDisplay, 'Andalucía');
+
+      if (locationSelected.value != 'Todas las comunidades') {
+        labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
+        // TODO: Esto va fuera del if pero por ahora está aquí para que no pete
+        dataDisplayed.value = populationService.filter(populationData,"0", gendersToDisplay, locationSelected.value);
+      }
+      else {
+        labelsDisplayed.value = populationService.getAutonomousCommunitiesAsLabels(populationData);
+        dataDisplayed.value = populationService.filter(populationData,"2021", gendersToDisplay, locationSelected.value);
+      }
+      // dataDisplayed.value = populationService.filter(populationData, 0, gendersToDisplay, locationSelected.value);
+
       updateChart();
     }
 
@@ -120,8 +163,8 @@ export default defineComponent({
       }, 0);
     }
 
-    function applyGenderFilter() {
-      changeChartContent( 0, 'Andalucía');
+    function reRenderChart() {
+      changeChartContent( 0);
     }
 
     function filterCheckedGenders(genders: any) {
@@ -135,25 +178,27 @@ export default defineComponent({
       return result
     }
 
+    function onlyAnOptionIsSelected(text: string) {
+      const checkedOptions = genders.value.filter(gender => gender.isChecked == true);
+      return (checkedOptions.length == 1 && checkedOptions[0].val == text)
+    }
+
     // Antes de que se muestre la página, cargamos los datos
     onBeforeMount(async () => { fetchData() });
 
     // Método asíncrono para cargar los datos de la población
     async function fetchData() {
       populationData = await populationService.obtainData();
+      changeChartContent();
 
-      // Ejemplo de Andalucía
-      labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
-      changeChartContent( 0, 'Andalucía');
-
-      // labels.value = populationService.getCcaaAsLabels(population);
-
-      // data.value = population.map((item: any) => {
-      //   const value = item.total_values;
-      //   if (value[0].interval == '2021') {
-      //     return value[0].value;
-      //   }
-      // });
+      /*
+       dataDisplayed.value = population.map((item: any) => {
+         const value = item.total_values;
+         if (value[0].interval == '2021') {
+           return value[0].value;
+         }
+       });
+      */
 
       showChart.value = true;
     }
@@ -162,9 +207,13 @@ export default defineComponent({
       dataDisplayed ,
       labelsDisplayed,
       currentChart,
+      locationSelected,
       changeChartContent,
       genders,
-      applyGenderFilter,
+      autonomousCommunities,
+      updateChart,
+      onlyAnOptionIsSelected,
+      reRenderChart,
       showChart,
       onBeforeMount,
       fetchData,
