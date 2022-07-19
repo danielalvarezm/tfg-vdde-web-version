@@ -5,67 +5,98 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Población según CCAA</ion-title>
+        <ion-title>Población según la comunidad autónoma</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
       <ion-grid class="ion-margin-start">
-
         <ion-list>
           <ion-list-header>
-            <ion-label>
-              Personalice su gráfico:
-            </ion-label>
+            <ion-label> Personalice su gráfico: </ion-label>
           </ion-list-header>
 
           <ion-row>
             <ion-col>
               <form>
                 <ion-list>
+                  <!-- Hacer un if que se muestre un select cnd sea imposible mostrar los 3 géneros a la vez, y hacer que current chart sea total por ejemplo-->
                   <ion-item v-for="entry in genders" :key="entry.val">
-                    <ion-label>{{entry.text}}</ion-label>
+                    <ion-label>{{ entry.text }}</ion-label>
                     <ion-checkbox
                       slot="end"
                       :disabled="onlyAnOptionIsSelected(entry.val)"
                       @update:modelValue="entry.isChecked = $event"
-                      @ionChange="reRenderChart"
-                      :modelValue="entry.isChecked">
+                      @ionChange="changeChartContent"
+                      :modelValue="entry.isChecked"
+                    >
                     </ion-checkbox>
                   </ion-item>
                 </ion-list>
               </form>
             </ion-col>
 
-            <ion-col>
+            <ion-col class="ion-margin-top">
               <ion-item>
                 <ion-label>Seleccione el tipo de gráfico:</ion-label>
-                <ion-select v-model="currentChart" interface="popover" placeholder="Elija una opción">
+                <ion-select
+                  v-model="chartSelected"
+                  interface="popover"
+                  placeholder="Elija una opción"
+                >
                   <ion-select-option value="bar">Barras</ion-select-option>
                   <ion-select-option value="line">Líneas</ion-select-option>
+                  <ion-select-option value="radar">Radar</ion-select-option>
+                  <ion-select-option value="polar area">Área polar</ion-select-option>
                   <ion-select-option value="pie">Circular</ion-select-option>
+                  <ion-select-option value="donut">Donut</ion-select-option>
+
                 </ion-select>
               </ion-item>
 
               <ion-item>
                 <ion-label>Seleccione la localización de la que quiera ver información:</ion-label>
-                <ion-select v-model="locationSelected" @ionChange="reRenderChart" interface="popover" placeholder="Elija una opción">
-                  <ion-select-option v-for="entry in autonomousCommunities" :key="entry.val" :value="entry.val">{{entry.text}}</ion-select-option>
+                <ion-select
+                  v-model="locationSelected"
+                  @ionChange="changeChartContent"
+                  interface="popover"
+                  placeholder="Elija una opción"
+                  >
+                  <ion-select-option
+                    v-for="entry in autonomousCommunities"
+                    :key="entry.val"
+                    :value="entry.val"
+                    >{{ entry.text }}</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
+              <ion-item v-if="locationSelected === 'Todas las comunidades'">
+                <ion-label>Seleccione el año:</ion-label>
+                <ion-select
+                  v-model="yearSelected"
+                  @ionChange="changeChartContent"
+                  interface="popover"
+                  placeholder="Elija una opción"
+                  >
+                  <ion-select-option
+                    v-for="entry in years"
+                    :key="entry.val"
+                    :value="entry.val"
+                    >{{ entry.val }}</ion-select-option
+                  >
                 </ion-select>
               </ion-item>
             </ion-col>
-            <!-- Cuando se marqué la opción de todas las comunidades, que aparezca el select con las opciones de los años -->
           </ion-row>
         </ion-list>
 
-        <p>{{ currentChart }}</p>
-        <p>{{genders}}</p>
-        <!-- center h2-->
-        <h2 class="ion-text-center">{{locationSelected}}</h2>
-
+        <h2 v-if="locationSelected != 'Todas las comunidades'" class="ion-text-center">{{ locationSelected }}</h2>
+        <h2 v-if="locationSelected === 'Todas las comunidades'" class="ion-text-center">{{ locationSelected }} - {{ yearSelected }}</h2>
         <div v-if="showChart === true">
-          <BarChart v-if="currentChart === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
-          <LineChart v-if="currentChart === 'line'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <BarChart v-if="chartSelected === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <LineChart v-if="chartSelected === 'line'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <RadarChart v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <PolarAreaChart v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%" />
         </div>
       </ion-grid>
     </ion-content>
@@ -73,14 +104,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount } from 'vue';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonItem, IonList, IonSelect, IonCheckbox, IonLabel, IonListHeader, IonButtons, IonSelectOption, IonMenuButton } from '@ionic/vue';
-import BarChart from './charts/barChart'
-import LineChart from './charts/lineChart'
-import { PopulationService } from '../services/populationService';
+import { defineComponent, ref, onBeforeMount } from "vue";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonGrid,
+  IonCol,
+  IonRow,
+  IonItem,
+  IonList,
+  IonSelect,
+  IonCheckbox,
+  IonLabel,
+  IonListHeader,
+  IonButtons,
+  IonSelectOption,
+  IonMenuButton,
+} from "@ionic/vue";
+import BarChart from "./charts/barChart";
+import LineChart from "./charts/lineChart";
+import RadarChart from "./charts/radarChart";
+import PolarAreaChart from "./charts/polarAreaChart";
+import { PopulationService } from "../services/populationService";
 
 export default defineComponent({
-  name: 'PopulationPage',
+  name: "PopulationPage",
   components: {
     IonContent,
     IonHeader,
@@ -89,6 +140,8 @@ export default defineComponent({
     IonToolbar,
     BarChart,
     LineChart,
+    RadarChart,
+    PolarAreaChart,
     IonGrid,
     IonRow,
     IonCol,
@@ -100,7 +153,7 @@ export default defineComponent({
     IonListHeader,
     IonButtons,
     IonSelectOption,
-    IonMenuButton
+    IonMenuButton,
   },
   setup() {
     let populationService = new PopulationService();
@@ -108,48 +161,69 @@ export default defineComponent({
     let showChart = ref(false);
     let dataDisplayed = ref([{}]);
     let labelsDisplayed = ref([]);
-    let locationSelected = ref('Andalucía');
-    let currentChart = ref('bar');
+    let locationSelected = ref("Todas las comunidades");
+    let yearSelected = ref("2021");
+    let chartSelected = ref("bar");
     let genders = ref([
-      { text: 'Total', val: 'total', isChecked: true },
-      { text: 'Hombre', val: 'male', isChecked: true },
-      { text: 'Mujer', val: 'female', isChecked: true }
+      { text: "Total", val: "total", isChecked: true },
+      { text: "Hombre", val: "male", isChecked: false },
+      { text: "Mujer", val: "female", isChecked: false },
     ]);
     let autonomousCommunities = ref([
-      { text: 'Todas las comunidades', val: 'Todas las comunidades'},
-      { text: 'Andalucía', val: 'Andalucía' },
-      { text: 'Principado de Asturias', val: 'Principado de Asturias' },
-      { text: 'Islas Baleares', val: 'Illes Balears' },
-      { text: 'Canarias', val: 'Canarias' },
-      { text: 'Cantabria', val: 'Cantabria'},
-      { text: 'Castilla y León', val: 'Castilla y León'},
-      { text: 'Castilla - La Mancha', val: 'Castilla - La Mancha'},
-      { text: 'Cataluña', val: 'Cataluña'},
-      { text: 'Comunidad Valenciana', val: 'Comunitat Valenciana'},
-      { text: 'Extremadura', val: 'Extremadura'},
-      { text: 'Galicia', val: 'Galicia'},
-      { text: 'Comunidad de Madrid', val: 'Comunidad de Madrid'},
-      { text: 'Región de Murcia', val: 'Región de Murcia'},
-      { text: 'Comunidad Foral de Navarra', val: 'Comunidad Foral de Navarra'},
-      { text: 'País Vasco', val: 'País Vasco'},
-      { text: 'La Rioja', val: 'La Rioja'},
-      { text: 'Ceuta', val: 'Ceuta'},
-      { text: 'Melilla', val: 'Melilla'},
-
-    ])
+      { text: "Todas las comunidades", val: "Todas las comunidades" },
+      { text: "Andalucía", val: "Andalucía" },
+      { text: "Principado de Asturias", val: "Principado de Asturias" },
+      { text: "Islas Baleares", val: "Illes Balears" },
+      { text: "Canarias", val: "Canarias" },
+      { text: "Cantabria", val: "Cantabria" },
+      { text: "Castilla y León", val: "Castilla y León" },
+      { text: "Castilla - La Mancha", val: "Castilla - La Mancha" },
+      { text: "Cataluña", val: "Cataluña" },
+      { text: "Comunidad Valenciana", val: "Comunitat Valenciana" },
+      { text: "Extremadura", val: "Extremadura" },
+      { text: "Galicia", val: "Galicia" },
+      { text: "Comunidad de Madrid", val: "Comunidad de Madrid" },
+      { text: "Región de Murcia", val: "Región de Murcia" },
+      { text: "Comunidad Foral de Navarra", val: "Comunidad Foral de Navarra" },
+      { text: "País Vasco", val: "País Vasco" },
+      { text: "La Rioja", val: "La Rioja" },
+      { text: "Ceuta", val: "Ceuta" },
+      { text: "Melilla", val: "Melilla" },
+    ]);
+    let years = ref([
+      { val: "2021" },
+      { val: "2020" },
+      { val: "2019" },
+      { val: "2018" },
+      { val: "2017" },
+      { val: "2016" },
+      { val: "2015" },
+      { val: "2014" },
+      { val: "2013" },
+      { val: "2012" },
+      { val: "2011" },
+      { val: "2010" },
+      { val: "2009" },
+      { val: "2008" },
+      { val: "2007" },
+      { val: "2006" },
+      { val: "2005" },
+      { val: "2004" },
+      { val: "2003" },
+      { val: "2002" }
+    ]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function changeChartContent(year = 0) {
+    function changeChartContent() {
       const gendersToDisplay = filterCheckedGenders(genders.value);
 
-      if (locationSelected.value != 'Todas las comunidades') {
+      if (locationSelected.value != "Todas las comunidades") {
         labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
         // TODO: Esto va fuera del if pero por ahora está aquí para que no pete
-        dataDisplayed.value = populationService.filter(populationData,"0", gendersToDisplay, locationSelected.value);
-      }
-      else {
+        dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
+      } else {
         labelsDisplayed.value = populationService.getAutonomousCommunitiesAsLabels(populationData);
-        dataDisplayed.value = populationService.filter(populationData,"2021", gendersToDisplay, locationSelected.value);
+        dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
       }
       // dataDisplayed.value = populationService.filter(populationData, 0, gendersToDisplay, locationSelected.value);
 
@@ -163,64 +237,54 @@ export default defineComponent({
       }, 0);
     }
 
-    function reRenderChart() {
-      changeChartContent( 0);
-    }
-
     function filterCheckedGenders(genders: any) {
       const result = [];
       for (let i = 0; i < genders.length; i++) {
         if (genders[i].isChecked) {
-          result.push(genders[i].val)
+          result.push(genders[i].val);
         }
       }
 
-      return result
+      return result;
     }
 
     function onlyAnOptionIsSelected(text: string) {
-      const checkedOptions = genders.value.filter(gender => gender.isChecked == true);
-      return (checkedOptions.length == 1 && checkedOptions[0].val == text)
+      const checkedOptions = genders.value.filter(
+        (gender) => gender.isChecked == true
+      );
+      return checkedOptions.length == 1 && checkedOptions[0].val == text;
     }
 
     // Antes de que se muestre la página, cargamos los datos
-    onBeforeMount(async () => { fetchData() });
+    onBeforeMount(async () => {
+      fetchData();
+    });
 
     // Método asíncrono para cargar los datos de la población
     async function fetchData() {
       populationData = await populationService.obtainData();
       changeChartContent();
-
-      /*
-       dataDisplayed.value = population.map((item: any) => {
-         const value = item.total_values;
-         if (value[0].interval == '2021') {
-           return value[0].value;
-         }
-       });
-      */
-
       showChart.value = true;
     }
 
     return {
-      dataDisplayed ,
+      dataDisplayed,
       labelsDisplayed,
-      currentChart,
       locationSelected,
+      yearSelected,
+      chartSelected,
       changeChartContent,
       genders,
       autonomousCommunities,
+      years,
       updateChart,
       onlyAnOptionIsSelected,
-      reRenderChart,
       showChart,
       onBeforeMount,
       fetchData,
-    }
-  }
+    };
+  },
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

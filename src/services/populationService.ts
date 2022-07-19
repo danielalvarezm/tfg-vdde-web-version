@@ -33,66 +33,75 @@ class PopulationService {
         });
     }
 
-    filter(population: any, year = '0', genders: any, autonomousCommunityName: string) {
-        if (autonomousCommunityName != 'Todas las comunidades') {
-            return this.filterByAutonomousCommunity(population, genders, autonomousCommunityName);
+    filter(population: any, year = "0", genders: any, autonomousCommunityName: string) {
+        if (autonomousCommunityName != "Todas las comunidades") {
+            return this.filterByAutonomousCommunity(
+                population,
+                genders,
+                autonomousCommunityName
+            );
         }
 
-        return this.filterByGenderBasedOnYear(population, year, genders)
+        return this.filterByGenderBasedOnYear(population, year, genders);
     }
 
     filterByAutonomousCommunity(population: any, genders: any, autonomousCommunityName: string) {
-        let autonomousCommunityContent: any = []
+        let autonomousCommunityContent: any = [];
         for (let i = 0; i < population.length; i++) {
             if (autonomousCommunityName != population[i].ccaa) {
                 continue;
             }
-            autonomousCommunityContent = population[i]
+            autonomousCommunityContent = population[i];
         }
+
         return this.filterByGenderBasedOnAutonomousCommunity(autonomousCommunityContent, genders);
     }
 
     filterByGenderBasedOnYear(population: any, year: string, genders: any) {
-        const finalDataset: any = []
+        const finalDataset: any = [];
         genders.forEach((gender: any) => {
             const dataFiltered: any = [];
 
-            if (gender == 'total') {
+            if (gender == "total") {
                 for (let i = 0; i < population.length; i++) {
-                    const data = population[i].total_values.filter((location: any) => location.interval == year)
+                    const data = population[i].total_values.filter(
+                        (location: any) => location.interval == year
+                    );
                     dataFiltered.push(data[0].value);
                 }
 
                 finalDataset.push({
-                    label: 'Total',
-                    backgroundColor: '#4766FF',
-                    data: dataFiltered
+                    label: "Total",
+                    backgroundColor: "rgba(71,102,255,1)",
+                    data: dataFiltered,
                 });
-            }
 
-            else if (gender == 'male') {
+            } else if (gender == "male") {
                 for (let i = 0; i < population.length; i++) {
-                    const data = population[i].male_values.filter((location: any) => location.interval == year)
+                    const data = population[i].male_values.filter(
+                        (location: any) => location.interval == year
+                    );
                     dataFiltered.push(data[0].value);
                 }
 
                 finalDataset.push({
-                    label: 'Hombre',
-                    backgroundColor: '#98CAFF',
-                    data: dataFiltered
+                    label: "Hombre",
+                    backgroundColor: "rgba(17,219,156,1)",
+                    data: dataFiltered,
                 });
-            }
 
-            else {
+            } else {
                 for (let i = 0; i < population.length; i++) {
-                    const data = population[i].female_values.filter((location: any) => location.interval == year)
+                    const data = population[i].female_values.filter(
+                        (location: any) => location.interval == year
+                    );
                     dataFiltered.push(data[0].value);
                 }
 
                 finalDataset.push({
-                    label: 'Mujer',
-                    backgroundColor: '#BAA2FA',
-                    data: dataFiltered
+                    label: "Mujer",
+                    backgroundColor: "rgba(176,56,219,1)",
+                    data: dataFiltered,
                 });
             }
         });
@@ -101,104 +110,54 @@ class PopulationService {
     }
 
     filterByGenderBasedOnAutonomousCommunity(autonomousCommunityContent: any, genders: any) {
-        const finalDataset: any = []
+        const finalDataset: any = [];
 
         genders.forEach((gender: any) => {
             const dataFilteredByOneGender: any = [];
-            if (gender == 'total') {
+            if (gender == "total") {
                 const autonomousCommunityTotalValues = autonomousCommunityContent.total_values;
                 for (let i = 0; i < autonomousCommunityTotalValues.length; i++) {
                     dataFilteredByOneGender.push(autonomousCommunityTotalValues[i].value);
                 }
 
                 finalDataset.push({
-                    label: 'Total',
-                    backgroundColor: '#4766FF',
-                    data: dataFilteredByOneGender
+                    label: "Total",
+                    backgroundColor: "rgba(71,102,255,1)",
+                    data: dataFilteredByOneGender,
                 });
-            }
 
-            else if (gender == 'male') {
+            } else if (gender == "male") {
                 const autonomousCommunityMaleValues = autonomousCommunityContent.male_values;
                 for (let i = 0; i < autonomousCommunityMaleValues.length; i++) {
                     dataFilteredByOneGender.push(autonomousCommunityMaleValues[i].value);
                 }
 
                 finalDataset.push({
-                    label: 'Hombre',
-                    backgroundColor: '#98CAFF',
-                    data: dataFilteredByOneGender
+                    label: "Hombre",
+                    backgroundColor: "rgba(17,219,156,1)",
+                    data: dataFilteredByOneGender,
                 });
-            }
 
-            else {
+            } else {
                 const autonomousCommunityFemaleValues = autonomousCommunityContent.female_values;
                 for (let i = 0; i < autonomousCommunityFemaleValues.length; i++) {
-                    dataFilteredByOneGender.push(autonomousCommunityFemaleValues[i].value);
+                    dataFilteredByOneGender.push(
+                        autonomousCommunityFemaleValues[i].value
+                    );
                 }
 
                 finalDataset.push({
-                    label: 'Mujer',
-                    backgroundColor: '#BAA2FA',
-                    data: dataFilteredByOneGender
+                    label: "Mujer",
+                    backgroundColor: "rgba(176,56,219,1)",
+                    data: dataFilteredByOneGender,
                 });
             }
         });
 
         return finalDataset;
     }
-
-
-
-
-
-    // filter(population: any, year = 0, gender: string, autonomousCommunityName: string) {
-    //     if (autonomousCommunityName != 'all') {
-    //         return this.filterByAutonomousCommunity(population, gender, autonomousCommunityName);
-    //     }
-    // }
-
-    // filterByAutonomousCommunity(population: any, gender: string, autonomousCommunityName: string) {
-    //     const datasetFiltered: any = [];
-    //     for (let i = 0; i < population.length; i++) {
-    //         if (autonomousCommunityName != population[i].ccaa) {
-    //             return;
-    //         }
-
-    //         //TODO: a lo mejor estos metodos se pueden sacar a un filter by gender
-    //         if (gender == 'total') {
-    //             const autonomousCommunityTotalValues = population[i].total_values;
-    //             for (let i = 0; i < autonomousCommunityTotalValues.length; i++) {
-    //                 datasetFiltered.push(autonomousCommunityTotalValues[i].value);
-    //             }
-    //             return datasetFiltered;
-    //         }
-
-    //         else if (gender == 'male') {
-    //             const autonomousCommunityMaleValues = population[i].male_values;
-    //             for (let i = 0; i < autonomousCommunityMaleValues.length; i++) {
-    //                 datasetFiltered.push(autonomousCommunityMaleValues[i].value);
-    //             }
-    //             return datasetFiltered;
-    //         }
-
-    //         const autonomousCommunityFemaleValues = population[i].female_values;
-    //         for (let i = 0; i < autonomousCommunityFemaleValues.length; i++) {
-    //             datasetFiltered.push(autonomousCommunityFemaleValues[i].value);
-    //         }
-
-    //         return datasetFiltered;
-    //     }
-    // }
 }
 
 // Si se selecciona la comunidad autónoma, se deshabilita la casilla de año, ya que si eliges una comunidad autónoma, es para ver los valores de esa comunidad
-
-// function getMalePopulation() {
-// }
-
-// function getFemalePopulation() {
-// }
-
 
 export { PopulationService };
