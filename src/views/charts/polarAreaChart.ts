@@ -55,7 +55,6 @@ export default defineComponent({
             pointHoverBorderColor: props.data[i].backgroundColor,
             data: props.data[i].data
           })
-          console.log(transformedData[i].backgroundColor)
         }
         return transformedData
       }

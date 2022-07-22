@@ -19,23 +19,39 @@
           <ion-row>
             <ion-col>
               <form>
-                <ion-list>
+                <ion-list v-if="chartSelected != 'pie' && chartSelected != 'donut'">
                   <!-- Hacer un if que se muestre un select cnd sea imposible mostrar los 3 géneros a la vez, y hacer que current chart sea total por ejemplo-->
-                  <ion-item v-for="entry in genders" :key="entry.val">
-                    <ion-label>{{ entry.text }}</ion-label>
+                  <ion-item v-for="gender in genders" :key="gender.val">
+                    <ion-label>{{ gender.text }}</ion-label>
                     <ion-checkbox
                       slot="end"
-                      :disabled="onlyAnOptionIsSelected(entry.val)"
-                      @update:modelValue="entry.isChecked = $event"
+                      :disabled="onlyAnOptionIsSelected(gender.val)"
+                      @update:modelValue="gender.isChecked = $event"
                       @ionChange="changeChartContent"
-                      :modelValue="entry.isChecked"
+                      :modelValue="gender.isChecked"
                     >
                     </ion-checkbox>
                   </ion-item>
                 </ion-list>
+
+                <ion-list v-if="chartSelected == 'pie' || chartSelected == 'donut'">
+                  <ion-item>
+                    <ion-label>Seleccione el género:</ion-label>
+                    <ion-select
+                      @ionChange="changeChartContent(JSON.stringify($event.detail.value))"
+                      interface="popover"
+                      placeholder="Elija una opción"
+                      v-model="genderSelected"
+                    >
+                      <ion-select-option v-for="gender in genders" :value="gender.val" :key="gender.val">
+                        {{gender.text}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-list>
+
               </form>
             </ion-col>
-
             <ion-col class="ion-margin-top">
               <ion-item>
                 <ion-label>Seleccione el tipo de gráfico:</ion-label>
@@ -96,7 +112,8 @@
           <BarChart v-if="chartSelected === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
           <LineChart v-if="chartSelected === 'line'" :labels="labelsDisplayed" :data="dataDisplayed" />
           <RadarChart v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
-          <PolarAreaChart v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%" />
+          <PolarAreaChart v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <PieChart v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
         </div>
       </ion-grid>
     </ion-content>
@@ -128,6 +145,7 @@ import BarChart from "./charts/barChart";
 import LineChart from "./charts/lineChart";
 import RadarChart from "./charts/radarChart";
 import PolarAreaChart from "./charts/polarAreaChart";
+import PieChart from "./charts/pieChart";
 import { PopulationService } from "../services/populationService";
 
 export default defineComponent({
@@ -142,6 +160,7 @@ export default defineComponent({
     LineChart,
     RadarChart,
     PolarAreaChart,
+    PieChart,
     IonGrid,
     IonRow,
     IonCol,
@@ -164,6 +183,7 @@ export default defineComponent({
     let locationSelected = ref("Todas las comunidades");
     let yearSelected = ref("2021");
     let chartSelected = ref("bar");
+    let genderSelected = ref("total");
     let genders = ref([
       { text: "Total", val: "total", isChecked: true },
       { text: "Hombre", val: "male", isChecked: false },
@@ -214,8 +234,14 @@ export default defineComponent({
     ]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function changeChartContent() {
-      const gendersToDisplay = filterCheckedGenders(genders.value);
+    function changeChartContent(aGender: any = null) {
+      let gendersToDisplay = [];
+      if (aGender === null) {
+        gendersToDisplay = filterCheckedGenders(genders.value);
+      } else {
+        console.log('hola')
+        gendersToDisplay = [aGender];
+      }
 
       if (locationSelected.value != "Todas las comunidades") {
         labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
@@ -273,6 +299,7 @@ export default defineComponent({
       locationSelected,
       yearSelected,
       chartSelected,
+      genderSelected,
       changeChartContent,
       genders,
       autonomousCommunities,
