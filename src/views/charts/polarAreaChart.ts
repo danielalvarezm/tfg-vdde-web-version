@@ -56,6 +56,7 @@ export default defineComponent({
             data: props.data[i].data
           })
         }
+        console.log(props.data)
         return transformedData
       }
 

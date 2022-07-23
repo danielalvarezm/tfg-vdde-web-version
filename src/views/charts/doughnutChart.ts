@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { defineComponent, h, PropType } from 'vue'
 
-import { Pie } from 'vue-chartjs'
+import { Doughnut } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   Title,
@@ -15,9 +15,9 @@ import {
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
 export default defineComponent({
-  name: 'PieChart',
+  name: 'DoughnutChart',
   components: {
-    Pie
+    Doughnut
   },
   props: {
     labels: {
@@ -33,43 +33,42 @@ export default defineComponent({
       default: () => {}
     },
     plugins: {
-      type: Array as PropType<Plugin<'pie'>[]>,
+      type: Array as PropType<Plugin<'doughnut'>[]>,
       default: () => []
     }
   },
   setup(props) {
-    // https://htmlcolorcodes.com/es/nombres-de-los-colores/
     const backgroundColors = [
-      '#E6E6FA',
-      '#DDA0DD',
-      '#BA55D3',
-      '#6A5ACD',
-      '#8B008B',
-      '#483D8B',
-      '#0000CD',
-      '#4169E1',
-      '#6495ED',
-      '#1E90FF',
-      '#ADD8E6',
-      '#B0C4DE',
-      '#4682B4',
-      '#5F9EA0',
-      '#00CED1',
-      '#7FFFD4',
-      '#AFEEEE',
-      '#E0FFFF',
-      '#00FFFF',
-    ]
+        '#E6E6FA',
+        '#DDA0DD',
+        '#BA55D3',
+        '#6A5ACD',
+        '#8B008B',
+        '#483D8B',
+        '#0000CD',
+        '#4169E1',
+        '#6495ED',
+        '#1E90FF',
+        '#ADD8E6',
+        '#B0C4DE',
+        '#4682B4',
+        '#5F9EA0',
+        '#00CED1',
+        '#7FFFD4',
+        '#AFEEEE',
+        '#E0FFFF',
+        '#00FFFF', 
+      ]
 
     const chartData = {
-      labels: props.labels,
-      datasets: [
-        {
-          backgroundColor: backgroundColors,
-          data: props.data[0].data
-        }
-      ]
-    }
+        labels: props.labels,
+        datasets: [
+          {
+            backgroundColor: backgroundColors,
+            data: props.data[0].data
+          }
+        ]
+      }
 
     const chartOptions = {
       responsive: true,
@@ -77,7 +76,7 @@ export default defineComponent({
     }
 
     return () =>
-      h(Pie, {
+      h(Doughnut, {
         chartData,
         chartOptions,
         styles: props.styles,

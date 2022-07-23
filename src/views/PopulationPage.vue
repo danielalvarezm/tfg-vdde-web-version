@@ -27,7 +27,7 @@
                       slot="end"
                       :disabled="onlyAnOptionIsSelected(gender.val)"
                       @update:modelValue="gender.isChecked = $event"
-                      @ionChange="changeChartContent"
+                      @ionChange="changeChartContent(false)"
                       :modelValue="gender.isChecked"
                     >
                     </ion-checkbox>
@@ -38,7 +38,7 @@
                   <ion-item>
                     <ion-label>Seleccione el género:</ion-label>
                     <ion-select
-                      @ionChange="changeChartContent(JSON.stringify($event.detail.value))"
+                      @ionChange="changeChartContent(true)"
                       interface="popover"
                       placeholder="Elija una opción"
                       v-model="genderSelected"
@@ -59,6 +59,8 @@
                   v-model="chartSelected"
                   interface="popover"
                   placeholder="Elija una opción"
+                  @ionChange="updateChart"
+
                 >
                   <ion-select-option value="bar">Barras</ion-select-option>
                   <ion-select-option value="line">Líneas</ion-select-option>
@@ -114,6 +116,7 @@
           <RadarChart v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <PolarAreaChart v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <PieChart v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <DoughnutChart v-if="chartSelected === 'donut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
         </div>
       </ion-grid>
     </ion-content>
@@ -146,6 +149,7 @@ import LineChart from "./charts/lineChart";
 import RadarChart from "./charts/radarChart";
 import PolarAreaChart from "./charts/polarAreaChart";
 import PieChart from "./charts/pieChart";
+import DoughnutChart from "./charts/doughnutChart";
 import { PopulationService } from "../services/populationService";
 
 export default defineComponent({
@@ -161,6 +165,7 @@ export default defineComponent({
     RadarChart,
     PolarAreaChart,
     PieChart,
+    DoughnutChart,
     IonGrid,
     IonRow,
     IonCol,
@@ -233,32 +238,28 @@ export default defineComponent({
       { val: "2002" }
     ]);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function changeChartContent(aGender: any = null) {
+    function changeChartContent(genderAsString = false) {
+      updateChart();
       let gendersToDisplay = [];
-      if (aGender === null) {
+
+      if (genderAsString === false) {
         gendersToDisplay = filterCheckedGenders(genders.value);
       } else {
-        console.log('hola')
-        gendersToDisplay = [aGender];
+        gendersToDisplay = [genderSelected.value];
       }
 
       if (locationSelected.value != "Todas las comunidades") {
         labelsDisplayed.value = populationService.getYearsAsLabels(populationData);
-        // TODO: Esto va fuera del if pero por ahora está aquí para que no pete
-        dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
       } else {
         labelsDisplayed.value = populationService.getAutonomousCommunitiesAsLabels(populationData);
-        dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
       }
-      // dataDisplayed.value = populationService.filter(populationData, 0, gendersToDisplay, locationSelected.value);
-
-      updateChart();
+      dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
     }
 
     function updateChart() {
       showChart.value = false;
       setTimeout(() => {
+        changeChartContent();
         showChart.value = true;
       }, 0);
     }
