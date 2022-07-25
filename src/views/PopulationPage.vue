@@ -19,7 +19,7 @@
           <ion-row>
             <ion-col>
               <form>
-                <ion-list v-if="chartSelected != 'pie' && chartSelected != 'donut'">
+                <ion-list v-if="chartSelected != 'pie' && chartSelected != 'doughnut'">
                   <!-- Hacer un if que se muestre un select cnd sea imposible mostrar los 3 géneros a la vez, y hacer que current chart sea total por ejemplo-->
                   <ion-item v-for="gender in genders" :key="gender.val">
                     <ion-label>{{ gender.text }}</ion-label>
@@ -27,18 +27,18 @@
                       slot="end"
                       :disabled="onlyAnOptionIsSelected(gender.val)"
                       @update:modelValue="gender.isChecked = $event"
-                      @ionChange="changeChartContent(false)"
+                      @ionChange="changeChartContent()"
                       :modelValue="gender.isChecked"
                     >
                     </ion-checkbox>
                   </ion-item>
                 </ion-list>
 
-                <ion-list v-if="chartSelected == 'pie' || chartSelected == 'donut'">
+                <ion-list v-if="chartSelected == 'pie' || chartSelected == 'doughnut'">
                   <ion-item>
                     <ion-label>Seleccione el género:</ion-label>
                     <ion-select
-                      @ionChange="changeChartContent(true)"
+                      @ionChange="changeChartContent()"
                       interface="popover"
                       placeholder="Elija una opción"
                       v-model="genderSelected"
@@ -49,7 +49,7 @@
                     </ion-select>
                   </ion-item>
                 </ion-list>
-
+{{genderSelected}}
               </form>
             </ion-col>
             <ion-col class="ion-margin-top">
@@ -59,7 +59,7 @@
                   v-model="chartSelected"
                   interface="popover"
                   placeholder="Elija una opción"
-                  @ionChange="updateChart"
+                  @ionChange="changeChartContent"
 
                 >
                   <ion-select-option value="bar">Barras</ion-select-option>
@@ -67,7 +67,7 @@
                   <ion-select-option value="radar">Radar</ion-select-option>
                   <ion-select-option value="polar area">Área polar</ion-select-option>
                   <ion-select-option value="pie">Circular</ion-select-option>
-                  <ion-select-option value="donut">Donut</ion-select-option>
+                  <ion-select-option value="doughnut">Donut</ion-select-option>
 
                 </ion-select>
               </ion-item>
@@ -92,7 +92,7 @@
                 <ion-label>Seleccione el año:</ion-label>
                 <ion-select
                   v-model="yearSelected"
-                  @ionChange="changeChartContent"
+                  @ionChange="updateChart"
                   interface="popover"
                   placeholder="Elija una opción"
                   >
@@ -116,7 +116,7 @@
           <RadarChart v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <PolarAreaChart v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <PieChart v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
-          <DoughnutChart v-if="chartSelected === 'donut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <DoughnutChart v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
         </div>
       </ion-grid>
     </ion-content>
@@ -238,14 +238,14 @@ export default defineComponent({
       { val: "2002" }
     ]);
 
-    function changeChartContent(genderAsString = false) {
-      updateChart();
+    function changeChartContent() {
+
       let gendersToDisplay = [];
 
-      if (genderAsString === false) {
-        gendersToDisplay = filterCheckedGenders(genders.value);
-      } else {
+      if (chartSelected.value === "pie" || chartSelected.value === "doughnut") {
         gendersToDisplay = [genderSelected.value];
+      } else {
+        gendersToDisplay = filterCheckedGenders(genders.value);
       }
 
       if (locationSelected.value != "Todas las comunidades") {
@@ -254,12 +254,13 @@ export default defineComponent({
         labelsDisplayed.value = populationService.getAutonomousCommunitiesAsLabels(populationData);
       }
       dataDisplayed.value = populationService.filter(populationData, yearSelected.value, gendersToDisplay, locationSelected.value);
+
+      updateChart();
     }
 
     function updateChart() {
       showChart.value = false;
       setTimeout(() => {
-        changeChartContent();
         showChart.value = true;
       }, 0);
     }
