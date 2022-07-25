@@ -47,7 +47,7 @@
 
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="6" size-lg="6" size-xl="6" size-sm="10" size-xs="12">
-            <ion-card href="/folder/Poblacion">
+            <ion-card href="/folder/poblacion-ccaa">
               <ion-item>
                 <ion-label class="card-title"><b>Población</b></ion-label>
               </ion-item>
@@ -59,7 +59,7 @@
           </ion-col>
 
           <ion-col size-md="6" size-lg="6" size-xl="6" size-sm="10" size-xs="12">
-            <ion-card>
+            <ion-card href="/folder/cantidad-nacimientos">
               <ion-item>
                 <ion-label class="card-title"><b>Nacimientos</b></ion-label>
               </ion-item>
@@ -85,7 +85,7 @@
           </ion-col>
 
           <ion-col size-md="6" size-lg="6" size-xl="6" size-sm="10" size-xs="12">
-            <ion-card>
+            <ion-card href="/folder/indice-fecundidad">
               <ion-item>
                 <ion-label class="card-title"><b>Índice de fecundidad</b></ion-label>
               </ion-item>
@@ -99,7 +99,7 @@
 
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="6" size-lg="6" size-xl="6" size-sm="10" size-xs="12">
-            <ion-card>
+            <ion-card href="/folder/indice-natalidad">
               <ion-item>
                 <ion-label class="card-title"><b>Índice de natalidad</b></ion-label>
               </ion-item>
@@ -111,13 +111,13 @@
           </ion-col>
 
           <ion-col size-md="6" size-lg="6" size-xl="6" size-sm="10" size-xs="12">
-            <ion-card>
+            <ion-card href="/folder/tasa-mortalidad-infantil">
               <ion-item>
-                <ion-label class="card-title"><b>Índice de mortalidad infantil</b></ion-label>
+                <ion-label class="card-title"><b>Tasa de mortalidad infantil</b></ion-label>
               </ion-item>
 
               <ion-card-content class="card-text">
-                Índice de mortalidad infantil según el año y el género
+                Tasa de mortalidad infantil según el año y el género
               </ion-card-content>
             </ion-card>
           </ion-col>

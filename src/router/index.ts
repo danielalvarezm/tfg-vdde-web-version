@@ -7,20 +7,32 @@ const routes: Array<RouteRecordRaw> = [
   //   redirect: "/folder/MenuPrincipal",
   // },
   {
-    path: "/folder/Defunciones-infantiles",
+    path: "/folder/defunciones-infantiles",
     component: () => import("../views/InfantDefunctionsPage.vue"),
   },
   {
-    path: "/folder/MenuPrincipal",
+    path: "/folder/menu-principal",
     component: () => import("../views/MainPage.vue"),
   },
   {
-    path: "/folder/Auxiliar",
-    component: () => import("../views/auxiliar.vue"),
+    path: "/folder/poblacion-ccaa",
+    component: () => import("../views/PopulationPage.vue"),
   },
   {
-    path: "/folder/Poblacion",
-    component: () => import("../views/PopulationPage.vue"),
+    path: "/folder/cantidad-nacimientos",
+    component: () => import("../views/AmountOfBirthsPage.vue"),
+  },
+  {
+    path: "/folder/indice-fecundidad",
+    component: () => import("../views/FecundityPage.vue"),
+  },
+  {
+    path: "/folder/indice-natalidad",
+    component: () => import("../views/NatalityPage.vue"),
+  },
+  {
+    path: "/folder/tasa-mortalidad-infantil",
+    component: () => import("../views/InfantMortalityRatePage.vue"),
   },
   {
     path: "/folder/:id",

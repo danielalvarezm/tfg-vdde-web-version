@@ -44,6 +44,7 @@ export default defineComponent({
         '#BA55D3',
         '#6A5ACD',
         '#8B008B',
+        '#4B0082',
         '#483D8B',
         '#0000CD',
         '#4169E1',
@@ -57,7 +58,7 @@ export default defineComponent({
         '#7FFFD4',
         '#AFEEEE',
         '#E0FFFF',
-        '#00FFFF', 
+        '#00FFFF',
       ]
 
     const chartData = {

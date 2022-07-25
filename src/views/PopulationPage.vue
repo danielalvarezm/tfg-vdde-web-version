@@ -20,7 +20,6 @@
             <ion-col>
               <form>
                 <ion-list v-if="chartSelected != 'pie' && chartSelected != 'doughnut'">
-                  <!-- Hacer un if que se muestre un select cnd sea imposible mostrar los 3 géneros a la vez, y hacer que current chart sea total por ejemplo-->
                   <ion-item v-for="gender in genders" :key="gender.val">
                     <ion-label>{{ gender.text }}</ion-label>
                     <ion-checkbox
@@ -36,7 +35,7 @@
 
                 <ion-list v-if="chartSelected == 'pie' || chartSelected == 'doughnut'">
                   <ion-item>
-                    <ion-label>Seleccione el género:</ion-label>
+                    <ion-label>Género:</ion-label>
                     <ion-select
                       @ionChange="changeChartContent()"
                       interface="popover"
@@ -49,12 +48,11 @@
                     </ion-select>
                   </ion-item>
                 </ion-list>
-{{genderSelected}}
               </form>
             </ion-col>
             <ion-col class="ion-margin-top">
               <ion-item>
-                <ion-label>Seleccione el tipo de gráfico:</ion-label>
+                <ion-label>Tipo de gráfico:</ion-label>
                 <ion-select
                   v-model="chartSelected"
                   interface="popover"
@@ -73,7 +71,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>Seleccione la localización de la que quiera ver información:</ion-label>
+                <ion-label>Localización:</ion-label>
                 <ion-select
                   v-model="locationSelected"
                   @ionChange="changeChartContent"
@@ -89,10 +87,10 @@
                 </ion-select>
               </ion-item>
               <ion-item v-if="locationSelected === 'Todas las comunidades'">
-                <ion-label>Seleccione el año:</ion-label>
+                <ion-label>Año:</ion-label>
                 <ion-select
                   v-model="yearSelected"
-                  @ionChange="updateChart"
+                  @ionChange="changeChartContent"
                   interface="popover"
                   placeholder="Elija una opción"
                   >
@@ -197,6 +195,7 @@ export default defineComponent({
     let autonomousCommunities = ref([
       { text: "Todas las comunidades", val: "Todas las comunidades" },
       { text: "Andalucía", val: "Andalucía" },
+      { text: "Aragón", val: "Aragón"},
       { text: "Principado de Asturias", val: "Principado de Asturias" },
       { text: "Islas Baleares", val: "Illes Balears" },
       { text: "Canarias", val: "Canarias" },

@@ -14,15 +14,6 @@
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
-
-          <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
-            </ion-item>
-          </ion-list>
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -34,7 +25,7 @@
 import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { homeSharp, homeOutline, barChartSharp, barChartOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'App',
@@ -56,43 +47,48 @@ export default defineComponent({
     const selectedIndex = ref(0);
     const appPages = [
       {
-        title: 'Bar Chart',
-        url: '/folder/BarChart',
-        iosIcon: paperPlaneOutline,
-        mdIcon: paperPlaneSharp
-      },
-      {
         title: 'Inicio',
-        url: '/folder/MenuPrincipal',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
+        url: '/folder/menu-principal',
+        iosIcon: homeOutline,
+        mdIcon: homeSharp
       },
       {
-        title: 'Auxiliar',
-        url: '/folder/Auxiliar',
-        iosIcon: heartOutline,
-        mdIcon: heartSharp
+        title: 'Población según la CCAA',
+        url: '/folder/poblacion-ccaa',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
+      },
+      {
+        title: 'Cantidad de nacimientos',
+        url: '/folder/cantidad-nacimientos',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
       },
       {
         title: 'Defunciones infantiles',
-        url: '/folder/DefuncionesInfantiles',
-        iosIcon: archiveOutline,
-        mdIcon: archiveSharp
+        url: '/folder/defunciones-infantiles',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
       },
       {
-        title: 'Población',
-        url: '/folder/Poblacion',
-        iosIcon: trashOutline,
-        mdIcon: trashSharp
+        title: 'Índice de fecundidad',
+        url: '/folder/indice-fecundidad',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
       },
       {
-        title: 'Spam',
-        url: '/folder/Spam',
-        iosIcon: warningOutline,
-        mdIcon: warningSharp
-      }
+        title: 'Índice de natalidad',
+        url: '/folder/indice-natalidad',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
+      },
+      {
+        title: 'Tasa de mortalidad infantil',
+        url: '/folder/tasa-mortalidad-infantil',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
+      },
     ];
-    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
     const path = window.location.pathname.split('folder/')[1];
     if (path !== undefined) {
@@ -104,21 +100,8 @@ export default defineComponent({
     return {
       selectedIndex,
       appPages,
-      labels,
-      archiveOutline,
-      archiveSharp,
-      bookmarkOutline,
-      bookmarkSharp,
-      heartOutline,
-      heartSharp,
-      mailOutline,
-      mailSharp,
-      paperPlaneOutline,
-      paperPlaneSharp,
-      trashOutline,
-      trashSharp,
-      warningOutline,
-      warningSharp,
+      barChartOutline,
+      barChartSharp,
       isSelected: (url: string) => url === route.path ? 'selected' : ''
     }
   }

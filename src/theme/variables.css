@@ -79,5 +79,5 @@ http://ionicframework.com/docs/theming/ */
 
 ion-split-pane {
   /** Split pane **/
-  --side-max-width: 300px;
+  --side-max-width: 310px;
 }
