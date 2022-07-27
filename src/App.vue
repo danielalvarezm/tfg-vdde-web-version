@@ -4,8 +4,8 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
+            <ion-list-header>VDDE</ion-list-header>
+            <ion-note>contacto@vdde.es</ion-note>
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item button @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
                 detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
@@ -48,43 +48,43 @@ export default defineComponent({
     const appPages = [
       {
         title: 'Inicio',
-        url: '/folder/menu-principal',
+        url: '/menu-principal',
         iosIcon: homeOutline,
         mdIcon: homeSharp
       },
       {
         title: 'Población según la CCAA',
-        url: '/folder/poblacion-ccaa',
+        url: '/poblacion-ccaa',
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },
       {
         title: 'Cantidad de nacimientos',
-        url: '/folder/cantidad-nacimientos',
-        iosIcon: barChartOutline,
-        mdIcon: barChartSharp
-      },
-      {
-        title: 'Defunciones infantiles',
-        url: '/folder/defunciones-infantiles',
+        url: '/cantidad-nacimientos',
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },
       {
         title: 'Índice de fecundidad',
-        url: '/folder/indice-fecundidad',
+        url: '/indice-fecundidad',
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },
       {
         title: 'Índice de natalidad',
-        url: '/folder/indice-natalidad',
+        url: '/indice-natalidad',
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },
       {
         title: 'Tasa de mortalidad infantil',
-        url: '/folder/tasa-mortalidad-infantil',
+        url: '/tasa-mortalidad-infantil',
+        iosIcon: barChartOutline,
+        mdIcon: barChartSharp
+      },
+      {
+        title: 'Defunciones infantiles',
+        url: '/defunciones-infantiles',
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },

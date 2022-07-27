@@ -90,44 +90,19 @@
           {{ locationSelected }} - {{ yearSelected }}
         </h2>
         <div v-if="showChart === true">
-          <BarChart
-            v-if="chartSelected === 'bar'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-          />
-          <LineChart
-            v-if="chartSelected === 'line'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-          />
-          <RadarChart
-            v-if="chartSelected === 'radar'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-            width="100%"
-            height="100%"
-          />
-          <PolarAreaChart
-            v-if="chartSelected === 'polar area'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-            width="100%"
-            height="100%"
-          />
-          <PieChart
-            v-if="chartSelected === 'pie'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-            width="100%"
-            height="100%"
-          />
-          <DoughnutChart
-            v-if="chartSelected === 'doughnut'"
-            :labels="labelsDisplayed"
-            :data="dataDisplayed"
-            width="100%"
-            height="100%"
-          />
+          <BarChart v-if="chartSelected === 'bar'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <LineChart v-if="chartSelected === 'line'" :labels="labelsDisplayed" :data="dataDisplayed" />
+          <RadarChart class="ion-hide-sm-up" v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed"/>
+          <RadarChart class="ion-hide-sm-down" v-if="chartSelected === 'radar'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <PolarAreaChart class="ion-hide-sm-up" v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed"/>
+          <PolarAreaChart class="ion-hide-sm-down" v-if="chartSelected === 'polar area'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <PieChart class="ion-hide-sm-up" v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed"/>
+          <PieChart class="ion-hide-sm-down" v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <DoughnutChart class="ion-hide-sm-up" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed"/>
+          <DoughnutChart class="ion-hide-sm-down" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+          <h2><b><br>Información</b></h2>
+          <ion-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
+          <ion-text><br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
         </div>
       </ion-grid>
     </ion-content>
