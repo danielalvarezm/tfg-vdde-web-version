@@ -152,7 +152,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader } from '@ionic/vue';
 export default defineComponent({
   name: 'MainPage',
   components: {
@@ -168,6 +168,9 @@ export default defineComponent({
     IonCol,
     IonCard,
     IonCardContent,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonCardHeader
   },
 })
 </script>
