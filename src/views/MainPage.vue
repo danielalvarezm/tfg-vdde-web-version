@@ -50,7 +50,7 @@
 
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="5" size-lg="5" size-xl="5" size-sm="10" size-xs="12">
-            <ion-card href="/poblacion-ccaa">
+            <ion-card href="/poblacion-ccaa" router-direction="forward">
               <img src="../../resources/poblacion.png" />
               <ion-card-header>
                 <ion-card-title><b>Población</b></ion-card-title>
@@ -176,6 +176,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .card-title {
   font-size: 1.3rem;
 }

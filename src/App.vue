@@ -5,10 +5,13 @@
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>VDDE</ion-list-header>
+            <ion-row class="ion-justify-content-center">
+              <img class="logo" src="../public/assets/icon/logo.png" />
+           </ion-row>
             <ion-note>contacto@vdde.es</ion-note>
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item button @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
-                detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+                detail="false" class="hydrated" :class="{ selected: isSelected(p.url)  }">
                 <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
@@ -22,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+import { IonApp, IonRow, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { homeSharp, homeOutline, barChartSharp, barChartOutline } from 'ionicons/icons';
@@ -31,6 +34,7 @@ export default defineComponent({
   name: 'App',
   components: {
     IonApp,
+    IonRow,
     IonContent,
     IonIcon,
     IonItem,
@@ -90,10 +94,11 @@ export default defineComponent({
       },
     ];
 
-    const path = window.location.pathname.split('folder/')[1];
+    const path = window.location.pathname.split('/')[1];
     if (path !== undefined) {
       selectedIndex.value = appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
+    console.log(path);
 
     const route = useRoute();
 
@@ -109,6 +114,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.logo {
+  width: 50%;
+}
+
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }

@@ -13,7 +13,7 @@
       <ion-grid class="ion-margin-start">
         <ion-list>
           <ion-list-header>
-            <ion-label>Personalice su gráfico: </ion-label>
+            <ion-label class="bigger-text">Personalice su gráfico: </ion-label>
           </ion-list-header>
 
           <ion-row>
@@ -21,7 +21,7 @@
               <form>
                 <ion-list v-if="chartSelected != 'pie' && chartSelected != 'doughnut'">
                   <ion-item v-for="gender in genders" :key="gender.val">
-                    <ion-label>{{ gender.text }}</ion-label>
+                    <ion-label class="bigger-text">{{ gender.text }}</ion-label>
                     <ion-checkbox
                       slot="end"
                       :disabled="onlyAnOptionIsSelected(gender.val)"
@@ -35,7 +35,7 @@
 
                 <ion-list v-if="chartSelected == 'pie' || chartSelected == 'doughnut'">
                   <ion-item>
-                    <ion-label>Género:</ion-label>
+                    <ion-label class="bigger-text">Género:</ion-label>
                     <ion-select
                       @ionChange="changeChartContent()"
                       interface="popover"
@@ -52,7 +52,7 @@
             </ion-col>
             <ion-col class="ion-margin-top">
               <ion-item>
-                <ion-label>Tipo de gráfico:</ion-label>
+                <ion-label class="bigger-text">Tipo de gráfico:</ion-label>
                 <ion-select
                   v-model="chartSelected"
                   interface="popover"
@@ -71,7 +71,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>Localización:</ion-label>
+                <ion-label class="bigger-text">Localización:</ion-label>
                 <ion-select
                   v-model="locationSelected"
                   @ionChange="changeChartContent"
@@ -87,7 +87,7 @@
                 </ion-select>
               </ion-item>
               <ion-item v-if="locationSelected === 'Todas las comunidades'">
-                <ion-label>Año:</ion-label>
+                <ion-label class="bigger-text">Año:</ion-label>
                 <ion-select
                   v-model="yearSelected"
                   @ionChange="changeChartContent"
@@ -119,9 +119,21 @@
           <PieChart class="ion-hide-sm-down" v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <DoughnutChart class="ion-hide-sm-up" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed"/>
           <DoughnutChart class="ion-hide-sm-down" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+
           <h2><b><br>Información</b></h2>
-          <ion-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
-          <ion-text><br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
+          <div>
+            <ion-text class="bigger-text">
+             Aquí podrá observar los valores de la población española en las distintas comunidades autónomas, según el año y el género.
+            </ion-text>
+            <ion-text class="bigger-text"><br><br><b>Generado por:</b> <a href="https://www.ine.es" target="_blank">INE</a></ion-text>
+            <div>
+              <ion-text class="bigger-text"><b><br>Frecuencia de actualización:</b> Semestral</ion-text>
+            </div>
+            <div>
+              <ion-text class="bigger-text"><br><a href="https://datos.gob.es/es/catalogo/ea0010587-poblacion-residente-por-fecha-sexo-y-generacion-edad-a-31-de-diciembre-semestral-comunidades-autonomas-cifras-de-poblacion-identificador-api-96821" target="_blank">Enlace al sitio</a></ion-text>
+            </div>
+            <ion-text class="bigger-text"><br><a href="https://vdde.me/api/poblacion" target="_blank">Accede al dataset</a></ion-text>
+          </div>
         </div>
       </ion-grid>
     </ion-content>
@@ -325,4 +337,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.bigger-text {
+  font-size: 1.1rem;
+}
+</style>
