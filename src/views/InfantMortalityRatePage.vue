@@ -13,7 +13,7 @@
       <ion-grid class="ion-margin-start">
         <ion-list>
           <ion-list-header>
-            <ion-label> Personalice su gráfico: </ion-label>
+            <ion-label class="bigger-text"> Personalice su gráfico: </ion-label>
           </ion-list-header>
 
           <ion-row>
@@ -21,7 +21,7 @@
               <form>
                 <ion-list v-if="chartSelected != 'pie' && chartSelected != 'doughnut'">
                   <ion-item v-for="gender in genders" :key="gender.val">
-                    <ion-label>{{ gender.text }}</ion-label>
+                    <ion-label class="bigger-text">{{ gender.text }}</ion-label>
                     <ion-checkbox
                       slot="end"
                       :disabled="onlyAnOptionIsSelected(gender.val)"
@@ -35,7 +35,7 @@
 
                 <ion-list v-if="chartSelected == 'pie' || chartSelected == 'doughnut'">
                   <ion-item>
-                    <ion-label>Género:</ion-label>
+                    <ion-label class="bigger-text">Género:</ion-label>
                     <ion-select
                       @ionChange="changeChartContent()"
                       interface="popover"
@@ -52,7 +52,7 @@
             </ion-col>
             <ion-col class="ion-margin-top">
               <ion-item>
-                <ion-label>Tipo de gráfico:</ion-label>
+                <ion-label class="bigger-text">Tipo de gráfico:</ion-label>
                 <ion-select
                   v-model="chartSelected"
                   interface="popover"
@@ -84,9 +84,82 @@
           <PieChart class="ion-hide-sm-down" v-if="chartSelected === 'pie'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
           <DoughnutChart class="ion-hide-sm-up" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed"/>
           <DoughnutChart class="ion-hide-sm-down" v-if="chartSelected === 'doughnut'" :labels="labelsDisplayed" :data="dataDisplayed" width="100%" height="100%"/>
+
           <h2><b><br>Información</b></h2>
-          <ion-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
-          <ion-text><br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</ion-text>
+          <div>
+            <ion-text class="bigger-text">
+             En esta página podrá apreciar la tasa de mortalidad infantil en España durante distintos años, según el género.
+            </ion-text>
+            <div>
+              <ul>
+                <li>
+                  <ion-text class="bigger-text">
+                    <b>Generado por:</b> <a href="https://www.ine.es" target="_blank">INE</a>
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <b>Frecuencia de actualización:</b> Anual
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <a href="https://datos.gob.es/es/catalogo/ea0010587-tasa-de-mortalidad-infantil-por-provincia-segun-sexo-idb-identificador-api-48881" target="_blank">Enlace al sitio</a>
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <a href="https://api.vdde.me/tasa-de-mortalidad-infantil" target="_blank">Accede al dataset</a>
+                  </ion-text>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <h2><b><br>Guía de uso</b></h2>
+            <ul>
+              <li>
+                <ion-text class="bigger-text">
+                  Se puede elegir un género o varios a la vez.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Para las gráficas "Circular" y "Donut", sólo se puede elegir un género.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Para el resto de gráficas si se pueden elegir varios géneros si está disponible la opción.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Cuando la opción "Todas las comunidades" está seleccionada, se puede elegir un año.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Cuando se especifica una comunidad autónoma, aparecen todos los valores en los distintos años para esa comunidad autónoma.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si no se puede especificar la localización, significa que se muestran todas las comunidades.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si no se puede especificar un género, significa que se está mostrando el total de la población.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si pasa el cursor o pulsa sobre algún elemento de la gráfica, podrá ver su valor total.
+                </ion-text>
+              </li>
+            </ul>
+          </div>
         </div>
       </ion-grid>
     </ion-content>
@@ -232,4 +305,12 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.bigger-text {
+  font-size: 1.1rem;
+}
+
+.do-margin-top {
+  margin-top: 0.4rem;
+}
+</style>

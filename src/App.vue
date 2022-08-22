@@ -2,13 +2,17 @@
   <ion-app>
     <ion-split-pane content-id="main-content">
       <ion-menu content-id="main-content" type="overlay">
+        <div class="center-text title-style">
+          <ion-text><b>VDDE</b></ion-text>
+        </div>
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>VDDE</ion-list-header>
             <ion-row class="ion-justify-content-center">
               <img class="logo" src="../public/assets/icon/logo.png" />
            </ion-row>
-            <ion-note>contacto@vdde.es</ion-note>
+           <ion-text>contacto@vdde.es</ion-text><br>
+           <ion-text>+34 612 345 678</ion-text>
+           <hr>
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item button @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
                 detail="false" class="hydrated" :class="{ selected: isSelected(p.url)  }">
@@ -25,10 +29,10 @@
 </template>
 
 <script lang="ts">
-import { IonApp, IonRow, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+import { IonApp, IonRow, IonContent, IonIcon, IonItem, IonLabel, IonList,  IonMenu, IonMenuToggle, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { homeSharp, homeOutline, barChartSharp, barChartOutline } from 'ionicons/icons';
+import { homeSharp, homeOutline, barChartSharp, barChartOutline, settingsSharp, settingsOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'App',
@@ -40,10 +44,8 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonList,
-    IonListHeader,
     IonMenu,
     IonMenuToggle,
-    IonNote,
     IonRouterOutlet,
     IonSplitPane,
   },
@@ -92,6 +94,12 @@ export default defineComponent({
         iosIcon: barChartOutline,
         mdIcon: barChartSharp
       },
+      {
+        title: 'Ajustes',
+        url: '',
+        iosIcon: settingsOutline,
+        mdIcon: settingsSharp,
+      }
     ];
 
     const path = window.location.pathname.split('/')[1];
@@ -114,9 +122,65 @@ export default defineComponent({
 </script>
 
 <style scoped>
+a:link {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:active {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.relocate.md {
+  margin-top: -1.8rem;
+  margin-bottom: -0.5rem;
+}
+
+.relocate.ios {
+  margin-top: -1.8rem;
+}
 
 .logo {
   width: 50%;
+  margin-top: -1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.title-style {
+  font-size: 1.5rem;
+  background-color: #3880FF;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+
+}
+
+ion-content.ios ion-text {
+  margin-left: 1rem;
+  color: #747474;
+}
+
+ion-content.md ion-text {
+  margin-left: 0.2rem;
+  color: #747474;
 }
 
 ion-menu ion-content {

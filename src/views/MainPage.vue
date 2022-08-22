@@ -5,11 +5,12 @@
         <ion-buttons slot="start">
           <ion-menu-button color="light"></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ion-text-center">
-          <h2 class="ion-hide-md-down ion-text-center"><b>Visualización de datos demográficos de España</b></h2>
-
-          <h2 style = "position:relative; right:20px;" class="ion-hide-md-up ion-text-center"><b>VDDE</b></h2>
+        <ion-title class="ion-hide-md-down ion-text-center">
+          <h2><b>Visualización de datos demográficos de España</b></h2>
         </ion-title>
+
+          <h2 class="ion-hide-md-up ion-text-center pull-left"><b>VDDE</b></h2>
+
       </ion-toolbar>
     </ion-header>
 
@@ -23,7 +24,7 @@
                 target="_blank">Gobierno de España</a>. Los datos se actualizarán una vez se hayan actualizado en la
               página del gobierno.
             </h5>
-            <h5 class="ion-hide-sm-down ion-text-justify">A su vez, <b>VDDE</b> (Visualización de Datos Demográficos de
+            <h5 class="ion-hide-sm-down ion-text-justify">A su vez, <b>VDDE</b> (Visualización de Datos Demográficos en
               España) genera sus propios datos a través de investigar y combinar el contenido de varios recursos distintos.
             </h5>
           </ion-col>
@@ -33,7 +34,7 @@
               target="_blank">Gobierno de España</a>. Los datos se actualizarán una vez se hayan actualizado en la
             página del gobierno.
           </h6>
-          <h6 class="ion-hide-sm-up ion-text-justify">A su vez, <b>VDDE</b> (Visualización de Datos Demográficos de
+          <h6 class="ion-hide-sm-up ion-text-justify">A su vez, <b>VDDE</b> (Visualización de Datos Demográficos en
               España) genera sus propios datos a través de investigar y combinar el contenido de varios recursos distintos.
           </h6>
         </ion-row>
@@ -41,9 +42,7 @@
         <ion-row class="ion-margin-vertical">
           <ion-header :translucent="true">
             <ion-toolbar color="dark">
-              <ion-title>
-                <p class="ion-text-center"><b>Seleccione un dato</b></p>
-              </ion-title>
+                <p class="ion-text-center bigger-text"><b>Seleccione un dato</b></p>
             </ion-toolbar>
           </ion-header>
         </ion-row>
@@ -84,7 +83,7 @@
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="5" size-lg="5" size-xl="5" size-sm="10" size-xs="12">
             <ion-card href="/indice-natalidad">
-              <img src="../../resources/nacimientos.png" />
+              <img src="../../resources/indice-natalidad.png" />
               <ion-card-header>
                 <ion-card-title><b>Índice de natalidad</b></ion-card-title>
                 <ion-card-subtitle>Generado por <b>INE</b><br>Sincronización estimada: <b>anual</b></ion-card-subtitle>
@@ -99,14 +98,14 @@
 
           <ion-col size-md="5" size-lg="5" size-xl="5" size-sm="10" size-xs="12">
             <ion-card href="/indice-fecundidad">
-              <img src="../../resources/nacimientos.png" />
+              <img src="../../resources/indice-fecundidad.png" />
               <ion-card-header>
                 <ion-card-title><b>Índice de fecundidad</b></ion-card-title>
                 <ion-card-subtitle>Generado por <b>INE</b><br>Sincronización estimada: <b>anual</b></ion-card-subtitle>
               </ion-card-header>
 
               <ion-card-content class="card-text">
-                Compruebe los valores del índice de fecundidad de la población española, en base a la comunidad autónoma y el año.
+                Compruebe el índice de fecundidad de la población española, en base a la comunidad autónoma y el año.
                 <ion-card-subtitle class="ion-margin-top">nacimientos, fecundidad, años, comunidades autónomas</ion-card-subtitle>
               </ion-card-content>
             </ion-card>
@@ -116,7 +115,7 @@
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="5" size-lg="5" size-xl="5" size-sm="10" size-xs="12">
             <ion-card>
-            <img src="../../resources/defunciones.png" />
+            <img src="../../resources/defunciones-infantiles.png" />
               <ion-card-header>
                 <ion-card-title><b>Defunciones infantiles</b></ion-card-title>
                 <ion-card-subtitle>Generado por <b>VDDE</b><br>Sincronización estimada: <b>anual</b></ion-card-subtitle>
@@ -177,6 +176,14 @@ export default defineComponent({
 
 <style scoped>
 
+.bigger-text {
+  font-size: 1.2rem;
+}
+
+.pull-left {
+  margin-left: -3rem;
+}
+
 .card-title {
   font-size: 1.3rem;
 }
@@ -189,5 +196,7 @@ export default defineComponent({
 .ion-content {
   font-family: Muli !important;
 }
+
+
 
 </style>

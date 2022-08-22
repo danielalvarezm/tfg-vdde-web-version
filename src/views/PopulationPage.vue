@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Población según la comunidad autónoma</ion-title>
+        <ion-title >Población según la comunidad autónoma</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -50,7 +50,8 @@
                 </ion-list>
               </form>
             </ion-col>
-            <ion-col class="ion-margin-top">
+
+            <ion-col>
               <ion-item>
                 <ion-label class="bigger-text">Tipo de gráfico:</ion-label>
                 <ion-select
@@ -69,39 +70,45 @@
 
                 </ion-select>
               </ion-item>
+              <ion-item-group>
 
-              <ion-item>
-                <ion-label class="bigger-text">Localización:</ion-label>
-                <ion-select
-                  v-model="locationSelected"
-                  @ionChange="changeChartContent"
-                  interface="popover"
-                  placeholder="Elija una opción"
-                  >
-                  <ion-select-option
-                    v-for="entry in autonomousCommunities"
-                    :key="entry.val"
-                    :value="entry.val"
-                    >{{ entry.text }}</ion-select-option
-                  >
-                </ion-select>
-              </ion-item>
-              <ion-item v-if="locationSelected === 'Todas las comunidades'">
-                <ion-label class="bigger-text">Año:</ion-label>
-                <ion-select
-                  v-model="yearSelected"
-                  @ionChange="changeChartContent"
-                  interface="popover"
-                  placeholder="Elija una opción"
-                  >
-                  <ion-select-option
-                    v-for="entry in years"
-                    :key="entry.val"
-                    :value="entry.val"
-                    >{{ entry.val }}</ion-select-option
-                  >
-                </ion-select>
-              </ion-item>
+                <ion-item class="margin-top-medium">
+                  <ion-label class="bigger-text">Localización:</ion-label>
+                  <ion-select
+                    v-model="locationSelected"
+                    @ionChange="changeChartContent"
+                    interface="popover"
+                    placeholder="Elija una opción"
+                    >
+                    <ion-select-option
+                      v-for="entry in autonomousCommunities"
+                      :key="entry.val"
+                      :value="entry.val"
+                      >{{ entry.text }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-item>
+
+                <ion-item-group>
+                  <ion-item class="margin-top-small" v-if="locationSelected === 'Todas las comunidades'">
+                    <ion-label class="bigger-text">Año:</ion-label>
+                    <ion-select
+                      v-model="yearSelected"
+                      @ionChange="changeChartContent"
+                      interface="popover"
+                      placeholder="Elija una opción"
+                      >
+                      <ion-select-option
+                        v-for="entry in years"
+                        :key="entry.val"
+                        :value="entry.val"
+                        >{{ entry.val }}</ion-select-option
+                      >
+                    </ion-select>
+                  </ion-item>
+                </ion-item-group>
+
+              </ion-item-group>
             </ion-col>
           </ion-row>
         </ion-list>
@@ -123,16 +130,77 @@
           <h2><b><br>Información</b></h2>
           <div>
             <ion-text class="bigger-text">
-             Aquí podrá observar los valores de la población española en las distintas comunidades autónomas, según el año y el género.
+             En esta página podrá apreciar los valores de la población española en las distintas comunidades autónomas, según el año y el género.
             </ion-text>
-            <ion-text class="bigger-text"><br><br><b>Generado por:</b> <a href="https://www.ine.es" target="_blank">INE</a></ion-text>
             <div>
-              <ion-text class="bigger-text"><b><br>Frecuencia de actualización:</b> Semestral</ion-text>
+              <ul>
+                <li>
+                  <ion-text class="bigger-text">
+                    <b>Generado por:</b> <a href="https://www.ine.es" target="_blank">INE</a>
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <b>Frecuencia de actualización:</b> Semestral
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <a href="https://datos.gob.es/es/catalogo/ea0010587-poblacion-residente-por-fecha-sexo-y-generacion-edad-a-31-de-diciembre-semestral-comunidades-autonomas-cifras-de-poblacion-identificador-api-96821" target="_blank">Enlace al sitio</a>
+                  </ion-text>
+                </li>
+                <li class="do-margin-top">
+                  <ion-text class="bigger-text">
+                    <a href="https://api.vdde.me/poblacion" target="_blank">Accede al dataset</a>
+                  </ion-text>
+                </li>
+              </ul>
             </div>
-            <div>
-              <ion-text class="bigger-text"><br><a href="https://datos.gob.es/es/catalogo/ea0010587-poblacion-residente-por-fecha-sexo-y-generacion-edad-a-31-de-diciembre-semestral-comunidades-autonomas-cifras-de-poblacion-identificador-api-96821" target="_blank">Enlace al sitio</a></ion-text>
-            </div>
-            <ion-text class="bigger-text"><br><a href="https://vdde.me/api/poblacion" target="_blank">Accede al dataset</a></ion-text>
+          </div>
+          <div>
+            <h2><b><br>Guía de uso</b></h2>
+            <ul>
+              <li>
+                <ion-text class="bigger-text">
+                  Se puede elegir un género o varios a la vez.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Para las gráficas "Circular" y "Donut", sólo se puede elegir un género.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Para el resto de gráficas si se pueden elegir varios géneros si está disponible la opción.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Cuando la opción "Todas las comunidades" está seleccionada, se puede elegir un año.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Cuando se especifica una comunidad autónoma, aparecen todos los valores en los distintos años para esa comunidad autónoma.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si no se puede especificar la localización, significa que se muestran todas las comunidades.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si no se puede especificar un género, significa que se está mostrando el total de la población.
+                </ion-text>
+              </li>
+              <li class="do-margin-top">
+                <ion-text class="bigger-text">
+                  Si pasa el cursor o pulsa sobre algún elemento de la gráfica, podrá ver su valor total.
+                </ion-text>
+              </li>
+            </ul>
           </div>
         </div>
       </ion-grid>
@@ -161,6 +229,7 @@ import {
   IonButtons,
   IonSelectOption,
   IonMenuButton,
+  IonItemGroup
 } from "@ionic/vue";
 import BarChart from "./charts/barChart";
 import LineChart from "./charts/lineChart";
@@ -197,6 +266,7 @@ export default defineComponent({
     IonButtons,
     IonSelectOption,
     IonMenuButton,
+    IonItemGroup
   },
   setup() {
     let populationService = new PopulationService();
@@ -341,5 +411,22 @@ export default defineComponent({
 
 .bigger-text {
   font-size: 1.1rem;
+}
+
+.do-margin-top {
+  margin-top: 0.4rem;
+}
+
+
+ion-item-group.md{
+  margin-top: 0.4rem;
+}
+
+form ion-list.ios {
+  margin-top: -0.2rem;
+}
+
+form ion-list.md {
+  margin-top: -0.81rem;
 }
 </style>
