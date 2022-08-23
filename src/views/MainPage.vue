@@ -6,7 +6,7 @@
           <ion-menu-button color="light"></ion-menu-button>
         </ion-buttons>
         <ion-title class="ion-hide-md-down ion-text-center">
-          <h2><b>Visualización de datos demográficos de España</b></h2>
+          <h2><b>Visualización de datos demográficos en España</b></h2>
         </ion-title>
 
           <h2 class="ion-hide-md-up ion-text-center pull-left"><b>VDDE</b></h2>
@@ -114,7 +114,7 @@
 
         <ion-row class="ion-justify-content-center ion-margin-horizontal">
           <ion-col size-md="5" size-lg="5" size-xl="5" size-sm="10" size-xs="12">
-            <ion-card>
+            <ion-card href="/defunciones-infantiles">
             <img src="../../resources/defunciones-infantiles.png" />
               <ion-card-header>
                 <ion-card-title><b>Defunciones infantiles</b></ion-card-title>
